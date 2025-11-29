@@ -5,13 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { LogIn, Mail, Lock } from "lucide-react";
+import { UserPlus, Mail, Lock, User } from "lucide-react";
 import { toast, Toaster } from "sonner";
 
-export default function SignIn() {
+export default function SignUp() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   function parseError(error: any): string {
@@ -40,23 +41,23 @@ export default function SignIn() {
     e.preventDefault();
     setIsLoading(true);
     
-    const res = await fetch("/api/auth/login", {
+    const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, name })
     });
     const data = await res.json();
     setIsLoading(false);
     
     if (!res.ok) {
       const errorMessage = parseError(data.error);
-      toast.error("Login failed", {
+      toast.error("Registration failed", {
         description: errorMessage
       });
       return;
     }
     
-    toast.success("Welcome back!", {
+    toast.success("Account created successfully", {
       description: "Redirecting to dashboard..."
     });
     
@@ -67,22 +68,37 @@ export default function SignIn() {
 
   return (
     <>
-      <Toaster  />
+      <Toaster />
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4 py-12">
         <Card className="w-full max-w-md border-slate-200 dark:border-slate-800 shadow-2xl">
           <CardHeader className="space-y-2 text-center">
             <div className="mx-auto w-12 h-12 bg-slate-900 dark:bg-slate-50 rounded-full flex items-center justify-center mb-2">
-              <LogIn className="w-6 h-6 text-slate-50 dark:text-slate-900" />
+              <UserPlus className="w-6 h-6 text-slate-50 dark:text-slate-900" />
             </div>
             <CardTitle className="text-3xl font-bold tracking-tight">
-              Welcome Back
+              Sign Up
             </CardTitle>
             <CardDescription className="text-base">
-              Sign in to your account to continue
+              Join us today and get started
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium flex items-center gap-2">
+                  <User className="w-4 h-4 text-slate-500" />
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  placeholder="Name"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  className="transition-all"
+                  disabled={isLoading}
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium flex items-center gap-2">
                   <Mail className="w-4 h-4 text-slate-500" />
@@ -91,7 +107,7 @@ export default function SignIn() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="Email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   className="transition-all"
@@ -107,7 +123,7 @@ export default function SignIn() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Password"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   className="transition-all"
@@ -121,7 +137,7 @@ export default function SignIn() {
               disabled={isLoading}
               className="w-full bg-slate-900 hover:bg-slate-800 dark:bg-slate-50 dark:hover:bg-slate-200 dark:text-slate-900 h-11 text-base font-medium"
             >
-              {isLoading ? "Signing In..." : "Sign In"}
+              {isLoading ? "Creating account..." : "Create account"}
             </Button>
 
             <div className="relative">
@@ -130,17 +146,17 @@ export default function SignIn() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-white dark:bg-slate-950 px-2 text-slate-500">
-                  Don't have an account?
+                  Already registered?
                 </span>
               </div>
             </div>
 
             <div className="text-center">
               <a 
-                href="/signup" 
+                href="/" 
                 className="text-sm font-medium text-slate-900 dark:text-slate-50 hover:underline underline-offset-4"
               >
-                Create account
+                Sign in
               </a>
             </div>
           </CardContent>

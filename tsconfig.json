@@ -8,11 +8,12 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "types": ["jest", "@testing-library/jest-dom", "node"],
     "plugins": [
       {
         "name": "next"
@@ -28,7 +29,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }
